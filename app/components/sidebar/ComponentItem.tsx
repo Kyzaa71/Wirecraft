@@ -20,10 +20,10 @@ export default function ComponentItem({ comp }: { comp: ComponentDef }) {
       className="group relative flex items-center gap-3 mx-2 mb-0.5 px-2.5 py-2 cursor-grab active:cursor-grabbing select-none rounded-lg border border-transparent hover:border-border hover:bg-surface2 hover:shadow-sm transition-all duration-100"
     >
       {/* Drag indicator */}
-      <div className="absolute left-1 top-1/2 -translate-y-1/2 flex flex-col gap-[3px] opacity-0 group-hover:opacity-40 transition-opacity">
-        <div className="w-[3px] h-[3px] rounded-full bg-text3" />
-        <div className="w-[3px] h-[3px] rounded-full bg-text3" />
-        <div className="w-[3px] h-[3px] rounded-full bg-text3" />
+      <div className="absolute left-1 top-1/2 -translate-y-1/2 flex flex-col gap-0.75 opacity-0 group-hover:opacity-40 transition-opacity">
+        <div className="w-0.75 h-0.75 rounded-full bg-text3" />
+        <div className="w-0.75 h-0.75 rounded-full bg-text3" />
+        <div className="w-0.75 h-0.75 rounded-full bg-text3" />
       </div>
 
       {/* Thumbnail */}

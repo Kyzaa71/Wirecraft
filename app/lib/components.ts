@@ -12,7 +12,7 @@ export const CATEGORIES: Category[] = [
     ],
   },
   {
-    name: 'Layout & Konten',
+    name: 'Layout',
     items: [
       { id: 'hero', name: 'Hero Section', defaultW: 400, defaultH: 220, category: 'Layout', thumb: 'hero' },
       { id: 'card', name: 'Card', defaultW: 180, defaultH: 230, category: 'Layout', thumb: 'card' },
@@ -42,7 +42,7 @@ export const CATEGORIES: Category[] = [
     ],
   },
   {
-    name: 'Form & Input',
+    name: 'Form',
     items: [
       { id: 'input', name: 'Input Field', defaultW: 240, defaultH: 40, category: 'Form', thumb: 'inp' },
       { id: 'textarea', name: 'Textarea', defaultW: 240, defaultH: 100, category: 'Form', thumb: 'ta' },
