@@ -21,91 +21,96 @@ export default function Sidebar() {
   return (
     <aside className="w-72 shrink-0 flex flex-col border-r border-border bg-surface overflow-hidden">
 
-      {/* ── Header ── */}
-      <div className="px-5 py-4 border-b border-border bg-white">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <LayoutGrid size={18} className="text-text3" />
-            <span className="text-[12px] font-semibold text-wk-text tracking-wide">Komponen</span>
+        <div className="px-4 pt-4 pb-4 py-4 border-b border-slate-200">
+          <div className="relative">
+
+            <Search
+              size={16}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"
+            />
+
+            <input
+              type="text"
+              placeholder="Cari komponen..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="
+                w-full
+                h-10
+                pl-10
+                pr-4
+                rounded-xl
+                border
+                border-slate-200
+                bg-slate-50
+                text-sm
+                text-slate-700
+                placeholder:text-slate-400
+                outline-none
+                transition-all
+                focus:bg-white
+                focus:border-slate-300
+              "
+            />
           </div>
-          <span className="text-[10px] font-mono bg-border2/30 text-text3 px-1.5 py-0.5 rounded-full border border-border">
-            {totalComponents}
-          </span>
         </div>
+              
+              {/* ── Category pills (only when not searching) ── */}
+            {!query && (
+          <div className="px-4 py-3 border-b border-slate-200">
+            <div className="flex gap-2 overflow-x-auto scrollbar-none">
 
-        {/* Search */}
-        <div className="relative">
-          <Search  size={16}className="absolute right-3 top-1/2 -translate-y-1/2 text-text3"/>
-          <input type="text" placeholder="Cari komponen..."value={query} onChange={e => setQuery(e.target.value)}
-            className=" w-full h-10 pl-15 pr-5 text-sm rounded-xl border border-border bg-white outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/20"
-          />
-        </div>
-      </div>
+              <button
+                onClick={() => setActiveCategory(null)}
+                className={`
+                  whitespace-nowrap
+                  px-4
+                  h-7
+                  min-w-16
+                  rounded-full
+                  text-xs
+                  font-medium
+                  transition-all
+                  ${
+                    activeCategory === null
+                      ? 'bg-slate-900 text-white shadow-sm'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }
+                `}
+              >
+                Semua
+              </button>
 
-      {/* ── Category pills (only when not searching) ── */}
-     {!query && (
-  <div className="px-4 py-4 border-b border-gray-200 overflow-x-auto scrollbar-none">
-    <div className="flex gap-4 min-w-max">
-
-      {/* Semua */}
-      <button
-        onClick={() => setActiveCategory(null)}
-        className={`
-          whitespace-nowrap
-          px-7
-          py-3
-          min-h-7
-          min-w-16
-          rounded-2xl
-          text-sm
-          font-medium
-          border
-          transition-all
-          duration-200
-          ${
-            activeCategory === null
-              ? 'bg-wk-text text-white border-wk-text shadow-md'
-              : 'bg-white text-text2 border-border hover:border-border2 hover:text-wk-text hover:bg-gray-50'
-          }
-        `}
-      >
-        Semua
-      </button>
-
-      {/* Categories */}
-      {CATEGORIES.map((cat) => (
-        <button
-          key={cat.name}
-          onClick={() =>
-            setActiveCategory(
-              activeCategory === cat.name ? null : cat.name
-            )
-          }
-          className={`
-            whitespace-nowrap
-            px-7
-            py-3
-            min-h-7
-            min-w-16
-            rounded-2xl
-            text-sm
-            font-medium
-            border
-            transition-all
-            duration-200
-            ${
-              activeCategory === cat.name
-                ? 'bg-wk-text text-white border-wk-text shadow-md'
-                : 'bg-white text-text2 border-border hover:border-border2 hover:text-wk-text hover:bg-gray-50'
-            }
-          `}
-        >
-          {cat.name}
-        </button>
-      ))}
-    </div>
-  </div>
-)}
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat.name}
+                  onClick={() =>
+                    setActiveCategory(
+                      activeCategory === cat.name ? null : cat.name
+                    )
+                  }
+                  className={`
+                    whitespace-nowrap
+                    px-4
+                    h-7
+                    min-w-16
+                    rounded-full
+                    text-xs
+                    font-medium
+                    transition-all
+                    ${
+                      activeCategory === cat.name
+                        ? 'bg-slate-900 text-white shadow-sm'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }
+                  `}
+                >
+                  {cat.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
       {/* ── Component list ── */}
       <div className="flex-1 overflow-y-auto">
