@@ -1,16 +1,42 @@
 'use client';
-import { Monitor, Smartphone, Trash2, Download, Undo2, Redo2 } from 'lucide-react';
+
+import {
+  Monitor,
+  Smartphone,
+  Trash2,
+  Download,
+  Undo2,
+  Redo2,
+} from 'lucide-react';
 import { useWireStore } from '../../store/wireStore';
 
 export default function Header() {
-  const { mode, setMode, clearCanvas, elements, canUndo, canRedo, undo, redo } = useWireStore();
+  const {
+    mode,
+    setMode,
+    clearCanvas,
+    elements,
+    canUndo,
+    canRedo,
+    undo,
+    redo,
+  } = useWireStore();
 
   const handleExport = async () => {
-    const canvas = document.querySelector('[data-canvas]') as HTMLElement;
+    const canvas = document.querySelector(
+      '[data-canvas]'
+    ) as HTMLElement;
+
     if (!canvas) return;
+
     try {
       const { toPng } = await import('html-to-image');
-      const dataUrl = await toPng(canvas, { backgroundColor: '#ffffff', pixelRatio: 2 });
+
+      const dataUrl = await toPng(canvas, {
+        backgroundColor: '#ffffff',
+        pixelRatio: 2,
+      });
+
       const a = document.createElement('a');
       a.download = `wireframe-${mode}.png`;
       a.href = dataUrl;
@@ -21,84 +47,185 @@ export default function Header() {
   };
 
   return (
-    <header className="h-12 flex-shrink-0 bg-[var(--surface)] border-b border-[var(--border)] flex items-center justify-between px-4 z-50">
-      {/* Logo */}
-      <div className="flex items-center gap-2">
-        <div className="w-7 h-7 bg-[var(--text)] rounded-md flex items-center justify-center flex-shrink-0">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="white">
-            <rect x="1" y="1" width="6" height="5" rx="1"/>
-            <rect x="9" y="1" width="6" height="5" rx="1"/>
-            <rect x="1" y="9" width="6" height="6" rx="1"/>
-            <rect x="9" y="9" width="6" height="6" rx="1"/>
-          </svg>
+    <header className="sticky top-0 z-50 h-14 shrink-0 border-b border-slate-200 bg-white/90 backdrop-blur-md px-5">
+      <div className="flex h-full items-center justify-between">
+
+        {/* Logo */}
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-slate-900 to-slate-700 shadow-sm">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 16 16"
+              fill="white"
+            >
+              <rect x="1" y="1" width="6" height="5" rx="1" />
+              <rect x="9" y="1" width="6" height="5" rx="1" />
+              <rect x="1" y="9" width="6" height="6" rx="1" />
+              <rect x="9" y="9" width="6" height="6" rx="1" />
+            </svg>
+          </div>
+
+          <div className="leading-tight">
+            <h1 className="text-[15px] font-bold text-slate-900">
+              WireKit
+            </h1>
+            <p className="text-[11px] text-slate-500">
+              Wireframe Builder
+            </p>
+          </div>
         </div>
-        <span className="font-bold text-[15px] tracking-tight text-[var(--text)]"
-          style={{ fontFamily: 'system-ui, sans-serif' }}>
-          WireKit
-        </span>
-      </div>
 
-      {/* Mode toggle */}
-      <div className="flex items-center gap-1 bg-[var(--bg)] border border-[var(--border)] rounded-lg p-0.5">
-        {([
-          { id: 'web', label: 'Web', Icon: Monitor },
-          { id: 'mobile', label: 'Mobile', Icon: Smartphone },
-        ] as const).map(({ id, label, Icon }) => (
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div className="flex items-center gap-3">
+
+              <span className="text-xs font-medium uppercase tracking-wider text-slate-500">
+                Preview
+              </span>
+
+              <div className="flex items-center rounded-2xl border border-slate-200 bg-slate-100 p-1.5 shadow-sm">
+                {[
+                  { id: 'web', label: 'Desktop', Icon: Monitor },
+                  { id: 'mobile', label: 'Mobile', Icon: Smartphone },
+                ].map(({ id, label, Icon }) => (
+                  <button
+                    key={id}
+                    onClick={() => setMode(id as 'web' | 'mobile')}
+                    className={`
+                    flex items-center gap-2.5
+                    rounded-xl
+                    min-w-25 min-h-8
+                    justify-center
+                    px-6 py-2.5
+                    text-sm font-semibold
+                    transition-all duration-200
+                    ${
+                      mode === id
+                        ? 'bg-white text-slate-900 shadow-md'
+                        : 'text-slate-500 hover:text-slate-900'
+                    }
+                    `}
+                  >
+                    <Icon size={16} />
+                    {label}
+                  </button>
+                ))}
+              </div>
+
+            </div>
+          </div>
+
+        {/* Right Actions */}
+        <div className="flex items-center gap-2">
+
+          {/* Elements Count */}
+          <div className="flex h-9 px-5 min-w-20  justify-center items-center rounded-xl border border-slate-200 bg-slate-50 ">
+            <span className="text-xs font-medium text-slate-600">
+              {elements.length} Elements
+            </span>
+          </div>
+
+          <div className="h-6 w-px bg-slate-200" />
+
+          {/* Undo */}
           <button
-            key={id}
-            onClick={() => setMode(id)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-              mode === id
-                ? 'bg-white text-[var(--text)] shadow-sm'
-                : 'text-[var(--text2)] hover:text-[var(--text)]'
-            }`}
+            onClick={undo}
+            disabled={!canUndo}
+            title="Undo"
+            className="
+              flex h-9 w-9 items-center justify-center
+              rounded-xl border border-slate-200
+              bg-white
+              text-slate-600
+              transition-all
+              hover:bg-slate-50
+              hover:text-slate-900
+              disabled:cursor-not-allowed
+              disabled:opacity-40
+            "
           >
-            <Icon size={13} />
-            {label}
+            <Undo2 size={15} />
           </button>
-        ))}
-      </div>
 
-      {/* Right actions */}
-      <div className="flex items-center gap-1.5">
-        {/* Element count */}
-        <span className="text-[10px] font-mono text-[var(--text3)] bg-[var(--bg)] border border-[var(--border)] px-2 py-1 rounded-md">
-          {elements.length} elemen
-        </span>
+          {/* Redo */}
+          <button
+            onClick={redo}
+            disabled={!canRedo}
+            title="Redo"
+            className="
+              flex h-9 w-9 items-center justify-center
+              rounded-xl border border-slate-200
+              bg-white
+              text-slate-600
+              transition-all
+              hover:bg-slate-50
+              hover:text-slate-900
+              disabled:cursor-not-allowed
+              disabled:opacity-40
+            "
+          >
+            <Redo2 size={15} />
+          </button>
 
-        {/* Undo/Redo */}
-        <button
-          onClick={undo}
-          disabled={!canUndo}
-          title="Undo (Ctrl+Z)"
-          className="w-8 h-8 flex items-center justify-center rounded-md border border-[var(--border)] bg-[var(--surface)] text-[var(--text2)] hover:bg-[var(--surface2)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-        >
-          <Undo2 size={14} />
-        </button>
-        <button
-          onClick={redo}
-          disabled={!canRedo}
-          title="Redo (Ctrl+Y)"
-          className="w-8 h-8 flex items-center justify-center rounded-md border border-[var(--border)] bg-[var(--surface)] text-[var(--text2)] hover:bg-[var(--surface2)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-        >
-          <Redo2 size={14} />
-        </button>
+          <div className="h-6 w-px bg-slate-200" />
 
-        {/* Clear */}
-        <button
-          onClick={() => { if (confirm('Bersihkan semua elemen di kanvas?')) clearCanvas(); }}
-          className="flex items-center gap-1.5 h-8 px-3 text-xs font-medium rounded-md border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
-        >
-          <Trash2 size={13} /> Bersihkan
-        </button>
+          {/* Clear */}
+          <button
+            onClick={() => {
+              if (
+                confirm(
+                  'Bersihkan semua elemen di kanvas?'
+                )
+              ) {
+                clearCanvas();
+              }
+            }}
+            className="
+              flex h-9 items-center gap-2
+              rounded-xl
+              border border-slate-200
+              bg-white
+              px-4
+              min-w-22  
+              justify-center
+              text-xs
+              font-medium
+              text-slate-600
+              transition-all
+              hover:border-red-200
+              hover:bg-red-50
+              hover:text-red-600
+            "
+          >
+            <Trash2 size={14} />
+            Clear
+          </button>
 
-        {/* Export */}
-        <button
-          onClick={handleExport}
-          className="flex items-center gap-1.5 h-8 px-3 text-xs font-medium rounded-md bg-[var(--text)] text-white hover:bg-[#2d2b27] transition-colors"
-        >
-          <Download size={13} /> Export PNG
-        </button>
+          {/* Export */}
+          <button
+            onClick={handleExport}
+            className="
+              flex h-9 items-center gap-2
+              rounded-xl
+              bg-linear-to-r
+              from-slate-900
+              to-slate-700
+              px-5
+              min-w-30  
+              justify-center
+              text-xs
+              font-semibold
+              text-white
+              shadow-sm
+              transition-all
+              hover:scale-[1.02]
+              hover:shadow-md
+            "
+          >
+            <Download size={14} />
+            Export PNG
+          </button>
+        </div>
       </div>
     </header>
   );

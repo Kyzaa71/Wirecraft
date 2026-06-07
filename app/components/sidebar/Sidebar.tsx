@@ -25,7 +25,7 @@ export default function Sidebar() {
       <div className="px-5 py-4 border-b border-border bg-white">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <LayoutGrid size={22} className="text-text3" />
+            <LayoutGrid size={18} className="text-text3" />
             <span className="text-[12px] font-semibold text-wk-text tracking-wide">Komponen</span>
           </div>
           <span className="text-[10px] font-mono bg-border2/30 text-text3 px-1.5 py-0.5 rounded-full border border-border">
